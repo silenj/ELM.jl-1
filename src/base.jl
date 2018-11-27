@@ -75,8 +75,8 @@ function find_activations(layer::HiddenLayer,
 end 
 
 function fit!(elm::ExtremeLearningMachine,
-              x,
-              y)
+              x::Union(Matrix{Float64}, DataFrame),
+              y::Union(Vector{Float64}, Array{Float64,1},Array{Int64,1}))
     # Trains the elm using the given training data
     #
     # Parameters
@@ -109,7 +109,7 @@ function fit!(elm::ExtremeLearningMachine,
 end
 
 function predict(elm::ExtremeLearningMachine,
-                 x)
+                 x::Union(Matrix{Float64}, DataFrame))
     # Predicts the output
     #
     # Parameters
