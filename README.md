@@ -16,7 +16,7 @@ Unlike conventional learning methods which MUST see the training data before gen
 ### Install
 
 ```julia
-Pkg.clone("git://github.com/lepisma/ELM.jl.git")
+Pkg.clone("git://github.com/silenj/ELM.jl.git")
 ```
 
 ### Usage

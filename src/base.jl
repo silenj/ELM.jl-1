@@ -1,7 +1,7 @@
 # Types and functions
 # -------------------
 
-type HiddenLayer
+mutable struct HiddenLayer
     # The hidden layer in ELM
     #
     # Properties
@@ -17,7 +17,7 @@ type HiddenLayer
     act_func::Function
 end
 
-type ExtremeLearningMachine
+mutable struct ExtremeLearningMachine
     # Extreme Learning Machine
     #
     # Properties
@@ -47,7 +47,7 @@ end
 function sigmoid(x)
     # Sigmoid activation
     
-    1 ./ (1 + exp(-x))
+    1.0 ./ (1.0 .+ exp.(-x))
 end
 
 function find_activations(layer::HiddenLayer,
@@ -68,15 +68,15 @@ function find_activations(layer::HiddenLayer,
     act_matrix = zeros(layer.n_hidden_neurons, n_observations)
     
     for i = 1:n_observations
-	act_matrix[:, i] = layer.act_func(layer.weight_matrix * x[i, :]' + layer.bias_vector)
+	act_matrix[:, i] = layer.act_func(layer.weight_matrix * x[i, :] .+ layer.bias_vector)
     end
 	
     act_matrix
 end 
 
 function fit!(elm::ExtremeLearningMachine,
-              x::Union(Matrix{Float64}, DataFrame),
-              y::Union(Vector{Float64}, DataArray{Float64, 1}, DataArray{Int64, 1}))
+              x,
+              y)
     # Trains the elm using the given training data
     #
     # Parameters
@@ -86,20 +86,20 @@ function fit!(elm::ExtremeLearningMachine,
     # `y` output data
 
     if typeof(x) == DataFrame
-        x_mat = float(array(x))
+        x_mat = convert(Array,x)
     else
         x_mat = x
     end
 
     if typeof(y) != Vector{Float64}
-        y_vec = float(array(y))
+        y_vec = convert(Array,y)
     else
         y_vec = y
     end
         
 
     n_observations, n_inputs = size(x_mat)
-    weight_matrix = rand(elm.hidden_layer.n_hidden_neurons, n_inputs) * 2 - 1
+    weight_matrix = rand(elm.hidden_layer.n_hidden_neurons, n_inputs) .* 2 .- 1
     elm.hidden_layer.weight_matrix = weight_matrix
 	
     act_matrix = find_activations(elm.hidden_layer, x_mat)
@@ -109,7 +109,7 @@ function fit!(elm::ExtremeLearningMachine,
 end
 
 function predict(elm::ExtremeLearningMachine,
-                 x::Union(Matrix{Float64}, DataFrame))
+                 x)
     # Predicts the output
     #
     # Parameters
@@ -118,7 +118,7 @@ function predict(elm::ExtremeLearningMachine,
     # `x` input data to predict (Matrix)
 
     if typeof(x) == DataFrame
-        x_mat = float(array(x))
+        x_mat = convert(Array,x)
     else
         x_mat = x
     end

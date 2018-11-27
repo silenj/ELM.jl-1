@@ -1,7 +1,9 @@
 module ELM
 
-using Reexport
-@reexport using DataFrames
+using DataFrames
+
+using LinearAlgebra
+import LinearAlgebra: pinv
 
 export ExtremeLearningMachine
 export fit!, predict
